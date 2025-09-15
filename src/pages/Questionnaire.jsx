@@ -4,6 +4,7 @@ import { getQuestions, saveAnswer } from "../api/examService";
 import { getItem, setItem } from "../utils/localStorage";
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
+import { CalendarIcon, Loader2 } from 'lucide-react';
 
 export default function Questionnaire({ onComplete }) {
   const nav = useNavigate();
@@ -69,9 +70,12 @@ export default function Questionnaire({ onComplete }) {
 
   const moveNext = async () => {
     try {
+      setLoadingSm(true);
       await saveAnswer(1, questions[currentIndex].questionId, answers[currentIndex] || "NO",);
     } catch (err) {
       console.error("Failed to save answer:", err);
+    } finally {
+      setLoadingSm(false);
     }
 
     if (currentIndex + 1 < questions.length) {
@@ -96,7 +100,7 @@ export default function Questionnaire({ onComplete }) {
       window.close();
       }, 1000);
     }, 2000);
-    
+
     removeItem("doc_userId");
     removeItem("exam_userId");
     removeItem("selected_language");
@@ -109,6 +113,7 @@ export default function Questionnaire({ onComplete }) {
   };
 
   const [loading, setLoading] = useState(false);
+  const [loadingSm, setLoadingSm] = useState(false);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -166,7 +171,10 @@ export default function Questionnaire({ onComplete }) {
                     onClick={moveNext}
                     disabled={!answers[currentIndex]}
                   >
-                    Save & Next
+                    <div className="flex items-center justify-between gap-2">
+                      <span>Save & Next</span>
+                      {loadingSm && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    </div>
                   </button>
                 </>
               ) : (
