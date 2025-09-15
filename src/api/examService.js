@@ -102,3 +102,13 @@ export async function getQuestions(id){
     throw e;
   }
 }
+
+export async function getIpDetails(id){
+  try {
+    const res = await axios.get(`${API_BASE}/auth/ip-details/${id}`);
+    return res.data;
+  } catch (e) {
+    throw e;
+  }
+}
+
