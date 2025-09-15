@@ -18,7 +18,7 @@ npm install
 Create a `.env` file in project root:
 
 ```bash
-VITE_API_BASE=http://localhost:8080/api
+VITE_API_BASE=http://localhost:9090
 ```
 
 > Replace `http://localhost:8080/api` with your backend service URL.
