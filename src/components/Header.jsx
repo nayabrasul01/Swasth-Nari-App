@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from '../public/esic_header_logo.jpg';
 import indiaGovSymbol from '../public/India_gov_symbol_header.png';
+import Nari_sakthi_logo from '../public/Nari_sakthi.png';
 
 
 const Header = () => {
@@ -25,7 +26,13 @@ const Header = () => {
           title="Home"
         />
       </a>
-
+      {/* Center Logo */}
+      <img
+        src={Nari_sakthi_logo}
+        alt="Nari Sakthi Logo"
+        style={{ height: '120px', objectFit: 'contain' }}
+        title="Nari Sakthi Logo"
+      />
       {/* Right Logo */}
       <a
         href="https://labour.gov.in/"
