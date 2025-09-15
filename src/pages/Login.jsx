@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { setItem } from "../utils/localStorage";
+import { getItem, setItem } from "../utils/localStorage";
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
 
 export default function Login() {
-  const [userId, setUserId] = useState("");
   const nav = useNavigate();
+  const [userId, setUserId] = useState("");
+  const docId = getItem("doc_userId");
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -14,6 +15,13 @@ export default function Login() {
     setItem("exam_userId", userId);
     nav("/instructions");
   }
+
+  React.useEffect(() => {
+    if(!docId) {
+      nav("/"); // if no docId, redirect to main login
+      return;
+    }
+  }, [docId]);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">

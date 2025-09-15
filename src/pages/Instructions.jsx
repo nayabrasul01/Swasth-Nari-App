@@ -7,7 +7,7 @@ import { getIpDetails } from "../api/examService";
 
 export default function Instructions() {
   const nav = useNavigate();
-  const userId = getItem("exam_userId") || "";
+  const userId = getItem("exam_userId");
   const [selectedLanguage, setSelectedLanguage] = useState("hindi");
   const [userDetails, setUserDetails] = React.useState(null);
 
@@ -20,10 +20,12 @@ export default function Instructions() {
         } catch (e) {
           setUserDetails(null);
         }
-      }
+      }else
+        nav("/");
     }
     fetchDetails();
   }, [userId]);
+  
   function start() {
     setItem("selected_language", selectedLanguage);
     nav("/exam");

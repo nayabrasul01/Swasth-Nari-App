@@ -6,12 +6,6 @@ import Footer from '../components/Footer.jsx';
 
 export default function Submitted() {
   const nav = useNavigate();
-  const userId = getItem("exam_userId") || "";
-
-  function start() {
-    // we will start session in Questionnaire page
-    nav("/exam");
-  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">

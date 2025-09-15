@@ -9,6 +9,11 @@ export const LS = {
 
 export function setItem(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+
+  // can enhance this to support expiry if needed
+  // const expiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes from now
+  // const data = { value, expiresAt };
+  // localStorage.setItem(key, JSON.stringify(data));
 }
 export function getItem(key, fallback = null) {
   const v = localStorage.getItem(key);

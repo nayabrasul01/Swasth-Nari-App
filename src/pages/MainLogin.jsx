@@ -13,7 +13,7 @@ export default function MainLogin() {
     e.preventDefault();
     if (!userId || !pass) return;
     setItem("doc_userId", userId);
-    setItem("doc_pass", pass);
+    // setItem("doc_pass", pass);
     nav("/login");
   }
 

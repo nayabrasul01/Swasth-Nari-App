@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getQuestions, saveAnswer } from "../api/examService";
+import { getItem, setItem } from "../utils/localStorage";
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
 
 export default function Questionnaire({ onComplete }) {
+  const nav = useNavigate();
+  const userId = getItem("exam_userId");
+  const docId = getItem("doc_userId");
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -30,7 +35,7 @@ export default function Questionnaire({ onComplete }) {
   };
 
   useEffect(() => {
-    console.log("inside useEffect - fetching questions");
+    if (!userId || !docId) nav("/"); // redirect if no userId or docId
     fetchQuestions();
   }, []);
 
@@ -91,6 +96,10 @@ export default function Questionnaire({ onComplete }) {
       window.close();
       }, 1000);
     }, 2000);
+    
+    removeItem("doc_userId");
+    removeItem("exam_userId");
+    removeItem("selected_language");
   };
 
   const getBoxColor = (idx) => {
