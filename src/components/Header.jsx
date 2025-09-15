@@ -27,12 +27,12 @@ const Header = () => {
         />
       </a>
       {/* Center Logo */}
-      <img
+      {/* <img
         src={Nari_sakthi_logo}
         alt="Nari Sakthi Logo"
         style={{ height: '120px', objectFit: 'contain' }}
         title="Nari Sakthi Logo"
-      />
+      /> */}
       {/* Right Logo */}
       <a
         href="https://labour.gov.in/"

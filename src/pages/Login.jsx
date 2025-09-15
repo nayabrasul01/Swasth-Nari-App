@@ -28,10 +28,13 @@ export default function Login() {
        <Header></Header>
        <div className="flex-grow flex items-center justify-center">
         <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow">
-          <h2 className="text-2xl font-bold mb-4">IP Checklist Portal</h2>
+          <div className="flex justify-center mb-4">
+            <h2 className="text-2xl font-bold mb-4">IP Checklist Portal</h2>
+          </div>
+          
           <form onSubmit={handleSubmit} className="space-y-4">
             <label className="block">
-              <div className="text-sm mb-1">Enter UserId</div>
+              {/* <div className="text-sm mb-1">Enter UserId</div> */}
               <input
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
