@@ -94,9 +94,9 @@ export async function completeSession(sessionId, token, payload) {
 }
 
 
-export async function getQuestions(id){
+export async function getQuestions(id, selectedLanguage){
   try {
-    const res = await axios.get(`${API_BASE}/questionnaires/${id}/questions`);
+    const res = await axios.get(`${API_BASE}/questionnaires/${id}/questions/${selectedLanguage}`);
     return res.data;
   } catch (e) {
     throw e;

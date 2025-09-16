@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getQuestions, saveAnswer } from "../api/examService";
-import { getItem, setItem } from "../utils/localStorage";
+import { getItem, setItem, removeItem } from "../utils/localStorage";
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
 import { CalendarIcon, Loader2 } from 'lucide-react';
@@ -10,6 +10,7 @@ export default function Questionnaire({ onComplete }) {
   const nav = useNavigate();
   const userId = getItem("exam_userId");
   const docId = getItem("doc_userId");
+  const selectedLanguage = getItem("selected_language");
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -19,7 +20,7 @@ export default function Questionnaire({ onComplete }) {
   // ✅ define fetchQuestions BEFORE useEffect
   const fetchQuestions = async () => {
     try {
-      const data = await getQuestions(1);
+      const data = await getQuestions(1, selectedLanguage);
       console.log("Fetched questions:", data);
 
       if (Array.isArray(data)) {
@@ -123,7 +124,7 @@ export default function Questionnaire({ onComplete }) {
         {loading ? (
           <div className="flex flex-col items-center justify-center w-full h-full">
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid mb-4"></div>
-            <span className="text-lg font-semibold">Submitting...</span>
+            {/* <span className="text-lg font-semibold">Submitting...</span> */}
           </div>
         ) : (
           <>
@@ -137,6 +138,7 @@ export default function Questionnaire({ onComplete }) {
               {currentQuestion ? (
                 <>
                   <p className="mb-6 text-lg">{currentQuestion.questionText}</p>
+                  <p className="mb-6 text-lg">{currentQuestion.questionTextLocal}</p>
 
                   <div className="flex items-center gap-4 mb-6">
                     <button

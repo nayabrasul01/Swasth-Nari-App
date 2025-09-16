@@ -8,7 +8,7 @@ import { getIpDetails } from "../api/examService";
 export default function Instructions() {
   const nav = useNavigate();
   const userId = getItem("exam_userId");
-  const [selectedLanguage, setSelectedLanguage] = useState("hindi");
+  const [selectedLanguage, setSelectedLanguage] = useState("hi");
   const [userDetails, setUserDetails] = React.useState(null);
 
   React.useEffect(() => {
@@ -44,12 +44,21 @@ export default function Instructions() {
               onChange={e => setSelectedLanguage(e.target.value)}
               aria-label="Select language"
             >
-              <option value="hindi">Hindi</option>
-              <option value="telugu">Telugu</option>
-              <option value="tamil">Tamil</option>
-              <option value="marathi">Marathi</option>
-              <option value="bengali">Bengali</option>
-              <option value="gujarati">Gujarati</option>
+              <option value="hi">Hindi</option>
+              <option value="te">Telugu</option>
+              <option value="ta">Tamil</option>
+              <option value="mr">Marathi</option>
+              <option value="bn">Bengali</option>
+              <option value="gu">Gujarati</option>
+              <option value="ur">Urdu</option>
+              <option value="ml">Malayalam</option>
+              <option value="kn">Kannada</option>
+              <option value="or">Odia</option>
+              <option value="doi">Dogri</option>
+              <option value="mai">Maithili</option>
+              <option value="sa">Sanskrit</option>
+              <option value="pa">Punjabi</option>
+              <option value="sd">Sindhi</option>
             </select>
           </div>
           <h2 className="text-2xl font-bold mb-2">Instructions</h2>

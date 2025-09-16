@@ -28,10 +28,10 @@ export default function Submitted() {
             />
           </svg>
           <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
-            Submission Successful!
+            Assessment completed.
           </h2>
           <p className="text-gray-600 text-center mb-6">
-            Thank you for completing your exam. Your responses have been securely submitted.
+            Thank you for completing your assessment. Visit nearest Dispensary/Hospital.
           </p>
           <ul className="list-disc pl-6 text-gray-700 mb-6 text-left space-y-1">
             <li>You may now safely close this window.</li>
