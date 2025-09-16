@@ -39,7 +39,7 @@ export default function Submitted() {
           </ul>
           <button
             onClick={() => nav("/")}
-            className="mt-2 px-6 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition"
+            className="mt-2 px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-600 transition"
           >
             Go to Home
           </button>

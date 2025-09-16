@@ -20,6 +20,7 @@ export default function Questionnaire({ onComplete }) {
   // ✅ define fetchQuestions BEFORE useEffect
   const fetchQuestions = async () => {
     try {
+      setLoading(true);
       const data = await getQuestions(1, selectedLanguage);
       console.log("Fetched questions:", data);
 
@@ -33,6 +34,8 @@ export default function Questionnaire({ onComplete }) {
     } catch (err) {
       console.error("Failed to fetch questions:", err);
       setQuestions([]);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -40,7 +43,6 @@ export default function Questionnaire({ onComplete }) {
     if (!userId || !docId) nav("/"); // redirect if no userId or docId
     fetchQuestions();
   }, []);
-
   const currentQuestion = questions[currentIndex];
 
   // reset timer whenever a new question loads
@@ -50,6 +52,8 @@ export default function Questionnaire({ onComplete }) {
 
   // countdown logic
   useEffect(() => {
+    if (questions.length === 0) return; // Wait until questions are loaded
+
     if (timeLeft <= 0) {
       handleAutoSubmit();
       return;
@@ -57,7 +61,7 @@ export default function Questionnaire({ onComplete }) {
 
     const timer = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
     return () => clearTimeout(timer);
-  }, [timeLeft]);
+  }, [timeLeft, questions]);
 
   const handleAnswer = (ans) => {
     setAnswers((prev) => ({ ...prev, [currentIndex]: ans }));
@@ -92,7 +96,7 @@ export default function Questionnaire({ onComplete }) {
     setShowSubmitModal(false);
     // onComplete(answers);
     // Show loader for 2 seconds, then navigate to /submitted
-    setShowSubmitModal(false);
+    // setShowSubmitModal(false);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
