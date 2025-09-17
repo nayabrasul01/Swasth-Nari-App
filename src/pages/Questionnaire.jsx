@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getQuestions, saveAnswer } from "../api/examService";
+import { getQuestions, saveAnswer, getUserResponses } from "../api/examService";
 import { getItem, setItem, removeItem } from "../utils/localStorage";
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
@@ -10,10 +10,12 @@ export default function Questionnaire({ onComplete }) {
   const nav = useNavigate();
   const userId = getItem("exam_userId");
   const docId = getItem("doc_userId");
+  const uhid = getItem("selected_UHID");
   const selectedLanguage = getItem("selected_language");
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [userResponses, setUserResponses] = useState([]);
   const [timeLeft, setTimeLeft] = useState(20);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
 
@@ -22,8 +24,6 @@ export default function Questionnaire({ onComplete }) {
     try {
       setLoading(true);
       const data = await getQuestions(1, selectedLanguage);
-      console.log("Fetched questions:", data);
-
       if (Array.isArray(data)) {
         setQuestions(data);
       } else if (data && Array.isArray(data.questions)) {
@@ -31,6 +31,7 @@ export default function Questionnaire({ onComplete }) {
       } else {
         setQuestions([]);
       }
+      
     } catch (err) {
       console.error("Failed to fetch questions:", err);
       setQuestions([]);
@@ -39,10 +40,37 @@ export default function Questionnaire({ onComplete }) {
     }
   };
 
+  const fetchUserResponses = async () => {
+    try {
+      setLoading(true);
+      // Fetch existing responses for the user to pre-fill answers
+      const data = await getUserResponses(1, uhid);
+
+      console.log("Fetched user responses:", data);
+      console.log("Fetched questions:", questions);
+
+      if(Object.keys(data).length == questions.length) {
+        alert("You have already completed the assessement. Redirecting to submission page.");
+        nav("/submitted");
+      }
+    } catch (err) {
+      console.error("Failed to fetch user responses:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (!userId || !docId) nav("/"); // redirect if no userId or docId
+    if (questions.length > 0) {
+      fetchUserResponses();
+    }
+  }, [questions]);
+
+  useEffect(() => {
+    if (!userId || !docId || !uhid) nav("/"); // redirect if no userId or docId
     fetchQuestions();
   }, []);
+
   const currentQuestion = questions[currentIndex];
 
   // reset timer whenever a new question loads
@@ -50,33 +78,30 @@ export default function Questionnaire({ onComplete }) {
     setTimeLeft(20);
   }, [currentIndex]);
 
-  // countdown logic
-  useEffect(() => {
-    if (questions.length === 0) return; // Wait until questions are loaded
+  // Removed Timer
+  // // countdown logic
+  // useEffect(() => {
+  //   if (questions.length === 0) return; // Wait until questions are loaded
 
-    if (timeLeft <= 0) {
-      handleAutoSubmit();
-      return;
-    }
+  //   if (timeLeft <= 0) {
+  //     handleAutoSubmit();
+  //     return;
+  //   }
 
-    const timer = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [timeLeft, questions]);
+  //   const timer = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
+  //   return () => clearTimeout(timer);
+  // }, [timeLeft, questions]);
 
-  const handleAnswer = (ans) => {
-    setAnswers((prev) => ({ ...prev, [currentIndex]: ans }));
-  };
-
-  const handleAutoSubmit = () => {
-    const ans = answers[currentIndex] || "NO"; // default NO
-    setAnswers((prev) => ({ ...prev, [currentIndex]: ans }));
-    moveNext();
-  };
+  // const handleAutoSubmit = () => {
+  //   const ans = answers[currentIndex] || "NO"; // default NO
+  //   setAnswers((prev) => ({ ...prev, [currentIndex]: ans }));
+  //   moveNext();
+  // };
 
   const moveNext = async () => {
     try {
       setLoadingSm(true);
-      await saveAnswer(1, questions[currentIndex].questionId, answers[currentIndex] || "NO",);
+      await saveAnswer(1, questions[currentIndex].questionId, answers[currentIndex] || "NO", uhid);
     } catch (err) {
       console.error("Failed to save answer:", err);
     } finally {
@@ -90,6 +115,11 @@ export default function Questionnaire({ onComplete }) {
     }
 
     console.log(answers);
+  };
+
+  const handleAnswer = (ans) => {
+    setAnswers((prev) => ({ ...prev, [currentIndex]: ans }));
+    moveNext();
   };
 
   const confirmSubmit = () => {
@@ -109,12 +139,33 @@ export default function Questionnaire({ onComplete }) {
     removeItem("doc_userId");
     removeItem("exam_userId");
     removeItem("selected_language");
+    removeItem("selected_UHID");
+    removeItem("vitals");
   };
 
   const getBoxColor = (idx) => {
     if (idx === currentIndex) return "bg-yellow-400";
     if (answers[idx]) return "bg-green-500";
     return "bg-gray-300";
+  };
+
+  // 🔊 Convert Base64 to Blob and play audio
+  const playAudio = (base64Audio) => {
+    try {
+      const byteCharacters = atob(base64Audio);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "audio/wav" });
+      const url = URL.createObjectURL(blob);
+
+      const audio = new Audio(url);
+      audio.play();
+    } catch (err) {
+      console.error("Error playing audio:", err);
+    }
   };
 
   const [loading, setLoading] = useState(false);
@@ -137,12 +188,31 @@ export default function Questionnaire({ onComplete }) {
                 <h2 className="text-xl font-bold">
                   Question {currentIndex + 1}/{questions.length}
                 </h2>
-                <p className="text-lg font-bold text-red-600">⏱️ {timeLeft}s</p>
+                {/* <p className="text-lg font-bold text-red-600">⏱️ {timeLeft}s</p> */}
               </div>
               {currentQuestion ? (
                 <>
                   <p className="mb-6 text-lg">{currentQuestion.questionText}</p>
                   <p className="mb-6 text-lg">{currentQuestion.questionTextLocal}</p>
+
+                  {/* 🔊 Play Audio Button */}
+                  {currentQuestion.audioContent && (
+                    <button
+                      className="px-4 py-2 bg-green-600 text-white rounded mb-4"
+                      onClick={() => playAudio(currentQuestion.audioContent)}
+                    >
+                      🔊 Audio Translation
+                    </button>
+                  )}
+
+                  {/* {currentQuestion.audioContent && (
+                    <button
+                      className="px-4 py-2 bg-purple-600 text-white rounded mb-4"
+                      onClick={() => playAudio(currentQuestion.audioContent)}
+                    >
+                      🔊 Play Question Audio
+                    </button>
+                  )} */}
 
                   <div className="flex items-center gap-4 mb-6">
                     <button
@@ -167,7 +237,7 @@ export default function Questionnaire({ onComplete }) {
                     </button>
                   </div>
 
-                  <button
+                  {/* <button
                   type="button"
                     className={`px-4 py-2 rounded ${
                       answers[currentIndex]
@@ -181,7 +251,7 @@ export default function Questionnaire({ onComplete }) {
                       <span>Save & Next</span>
                       {loadingSm && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     </div>
-                  </button>
+                  </button> */}
                 </>
               ) : (
                 <p>Loading question...</p>
@@ -195,10 +265,10 @@ export default function Questionnaire({ onComplete }) {
                 {questions.map((_, idx) => (
                   <div
                     key={idx}
-                    className={`w-8 h-8 flex items-center justify-center rounded text-sm font-bold text-white cursor-pointer ${getBoxColor(
+                    className={`w-8 h-8 flex items-center justify-center rounded text-sm font-bold text-white cursor-default ${getBoxColor(
                       idx
                     )}`}
-                    onClick={() => setCurrentIndex(idx)}
+                    // onClick={() => setCurrentIndex(idx)}
                   >
                     {idx + 1}
                   </div>

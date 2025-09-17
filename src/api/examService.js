@@ -57,7 +57,7 @@ export async function startSession(userIdentifier, examId = "exam-uuid-001") {
 //   }
 // }
 
-export async function saveAnswer(questionnaireId, questionId, answer) {
+export async function saveAnswer(questionnaireId, questionId, answer, userId) {
   try {
     const response = await fetch(`${API_BASE}/responses`, {
       method: 'POST',
@@ -67,7 +67,7 @@ export async function saveAnswer(questionnaireId, questionId, answer) {
       body: JSON.stringify({
         questionnaireId: Number(questionnaireId),
         questionId: Number(questionId),
-        userId: 1, // Assuming userId is 1 for this example
+        userId: userId, // Assuming userId is 1 for this example
         responseValue: String(answer)
       }),
     });
@@ -103,10 +103,30 @@ export async function getQuestions(id, selectedLanguage){
   }
 }
 
+export async function getUserResponses(id, uhid){
+  try {
+    const res = await axios.get(`${API_BASE}/responses/user/${uhid}/questionnaire/${id}`);
+    return res.data;
+  } catch (e) {
+    throw e;
+  }
+}
+
 export async function getIpDetails(id){
   try {
-    const res = await axios.get(`${API_BASE}/auth/ip-details/${id}`);
-    return res.data;
+    // const res = await axios.get(`${API_BASE}/auth/ip-details/${id}`);
+    const response = await fetch(`${API_BASE}/questionnaires/getIpDetails`, {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        IPNumber: id
+      })
+    });
+
+    const data = await response.json();
+    return data;
   } catch (e) {
     throw e;
   }
