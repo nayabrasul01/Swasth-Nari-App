@@ -261,6 +261,7 @@ export default function Instructions() {
                     onChange={(e) => setBp(e.target.value)}
                     placeholder="e.g., 120/80"
                     className="w-full border rounded px-3 py-2"
+                    required
                   />
                 </div>
                 <div>
@@ -271,6 +272,7 @@ export default function Instructions() {
                     onChange={(e) => setSugar(e.target.value)}
                     placeholder="mg/dL"
                     className="w-full border rounded px-3 py-2"
+                    required
                   />
                 </div>
                 <div>
@@ -281,6 +283,7 @@ export default function Instructions() {
                     onChange={(e) => setHb(e.target.value)}
                     placeholder="g/dL"
                     className="w-full border rounded px-3 py-2"
+                    required
                   />
                 </div>
               </div>

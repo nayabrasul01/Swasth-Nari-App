@@ -6,6 +6,18 @@ import Footer from '../components/Footer.jsx';
 
 export default function Submitted() {
   const nav = useNavigate();
+  const [displayText, setDisplayText] = React.useState("Visit nearest Dispensary/Hospital.");
+  const visitRequired = getItem("visit_required");
+
+  React.useEffect(() => {
+    console.log(visitRequired);
+    
+    if (Boolean(visitRequired)) {
+      setDisplayText("Visit nearest Dispensary/Hospital.");
+    }else{
+      setDisplayText("");
+    }
+  }, [visitRequired]);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -30,9 +42,11 @@ export default function Submitted() {
           <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
             Assessment completed.
           </h2>
-          <p className="text-gray-600 text-center mb-6">
-            Thank you for completing your assessment. Visit nearest Dispensary/Hospital.
-          </p>
+          {/* <p className="text-gray-600 text-center mb-6">
+            Thank you for completing your assessment.   
+          </p> */}
+          <h3 className="text-xl">{displayText}</h3>
+          <br />
           <ul className="list-disc pl-6 text-gray-700 mb-6 text-left space-y-1">
             <li>You may now safely close this window.</li>
             <li>If you need to access the portal again, please contact the administrator.</li>

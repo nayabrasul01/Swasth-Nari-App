@@ -48,9 +48,6 @@ export default function Questionnaire({ onComplete }) {
       // Fetch existing responses for the user to pre-fill answers
       const data = await getUserResponses(1, uhid);
 
-      console.log("Fetched user responses:", data);
-      console.log("Fetched questions:", questions);
-
       if(Object.keys(data).length == questions.length) {
         alert("You have already completed the assessement. Redirecting to submission page.");
         nav("/submitted");
@@ -115,8 +112,6 @@ export default function Questionnaire({ onComplete }) {
     } else {
       setShowSubmitModal(true);
     }
-
-    console.log(answers);
   };
 
   const handleAnswer = (ans) => {
@@ -126,23 +121,29 @@ export default function Questionnaire({ onComplete }) {
 
   const confirmSubmit = () => {
     setShowSubmitModal(false);
+
+    let flag = false;
+    for (const key in answers) {
+      if (answers[key] === "YES") {
+        flag = true;
+        break;
+      }
+    }
+    
+    setItem("visit_required", flag);
+    removeItem("doc_userId");
+    removeItem("exam_userId");
+    removeItem("selected_language");
+    removeItem("selected_UHID");
+    removeItem("vitals");
     // onComplete(answers);
     // Show loader for 2 seconds, then navigate to /submitted
     // setShowSubmitModal(false);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      window.location.href = "/submitted";
-      setTimeout(() => {
-      window.close();
-      }, 1000);
-    }, 2000);
-
-    removeItem("doc_userId");
-    removeItem("exam_userId");
-    removeItem("selected_language");
-    removeItem("selected_UHID");
-    removeItem("vitals");
+      nav("/submitted");
+    }, 2000); 
   };
 
   const getBoxColor = (idx) => {
