@@ -34,6 +34,8 @@ export default function Questionnaire({ onComplete }) {
       
     } catch (err) {
       console.error("Failed to fetch questions:", err);
+      alert("Failed to load questions. Please try again later.");
+      nav("/instructions");
       setQuestions([]);
     }finally {
       setLoading(false);

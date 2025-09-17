@@ -28,7 +28,7 @@ export default function Instructions() {
           setLoading(true);
           // const response = await getIpDetails(userId);
           const response = ipDetailsMockData;
-          console.log(response);
+          
           if(response.employeeIPNo == null){
             alert("No IP found with the given IP. Please enter valid IP No.");
             nav("/login");
@@ -152,7 +152,7 @@ export default function Instructions() {
               {/* <h3 className="font-semibold mb-2">IP Details</h3> */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-gray-800">
                 <div>
-                  <span className="font-medium">IP Name:</span> {ipDetails.personalDetails[0].name || "-"}
+                  <span className="font-medium">IP Name:</span> {ipDetails.personalDetails?.[0]?.name || "-"}
                 </div>
                 <div>
                   <span className="font-medium">IP Number:</span> {ipDetails.employeeIPNo || "-"}
@@ -161,11 +161,11 @@ export default function Instructions() {
                   <span className="font-medium">UHID:</span> {ipDetails.uHID || "-"}
                 </div>
                 <div>
-                  <span className="font-medium">Sex:</span> {ipDetails.personalDetails[0].sex || "-"}
+                  <span className="font-medium">Sex:</span> {ipDetails.personalDetails?.[0]?.sex || "-"}
                 </div>
                 <div>
                   <span className="font-medium">Date of Birth: </span>
-                  {ipDetails.personalDetails[0].dateOfBirth
+                  {ipDetails.personalDetails?.[0]?.dateOfBirth
                   ? ipDetails.personalDetails[0].dateOfBirth.split(" ")[0]
                   : "-"}
                 </div>
@@ -239,7 +239,7 @@ export default function Instructions() {
           <div className="mt-6 flex gap-3">
             <button
               onClick={takeVitalSigns}
-              className="bg-green-600 text-white px-4 py-2 rounded"
+              className="bg-blue-600 text-white px-4 py-2 rounded"
             >
               Next
             </button>
@@ -293,7 +293,7 @@ export default function Instructions() {
                   Cancel
                 </button>
                 <button
-                  className="px-2 py-2 bg-green-600 text-white rounded"
+                  className="px-2 py-2 bg-blue-600 text-white rounded"
                   onClick={handleSubmitHealth}
                 >
                   Save & Continue
