@@ -4,14 +4,23 @@ import { setItem } from "../utils/localStorage";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
 import Nari_sakthi_logo from '../public/Nari_sakthi.png';
+import { login } from "../api/examService";
 
 export default function MainLogin() {
   const [userId, setUserId] = useState("");
   const [pass, setPass] = useState("");
   const nav = useNavigate();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+
+    const response = await login(userId, pass);
+    if(response.status === "failure") {
+      alert("Invalid credentials. Please try again.");
+      return;
+    }
+    localStorage.setItem("jwt", response.token);
+
     if (!userId || !pass) return;
     setItem("doc_userId", userId);
     // setItem("doc_pass", pass);

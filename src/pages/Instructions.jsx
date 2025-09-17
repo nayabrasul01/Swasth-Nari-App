@@ -26,8 +26,8 @@ export default function Instructions() {
       if (userId) {
         try {
           setLoading(true);
-          // const response = await getIpDetails(userId);
-          const response = ipDetailsMockData;
+          const response = await getIpDetails(userId);
+          // const response = ipDetailsMockData;
           
           if(response.employeeIPNo == null){
             alert("No IP found with the given IP. Please enter valid IP No.");

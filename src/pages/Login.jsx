@@ -6,13 +6,13 @@ import Footer from '../components/Footer.jsx';
 
 export default function Login() {
   const nav = useNavigate();
-  const [userId, setUserId] = useState("");
+  const [ipNumber, setIpNumber] = useState("");
   const docId = getItem("doc_userId");
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!userId) return;
-    setItem("exam_userId", userId);
+    if (!ipNumber) return;
+    setItem("exam_userId", ipNumber);
     nav("/instructions");
   }
 
@@ -38,10 +38,10 @@ export default function Login() {
             <label className="block">
               {/* <div className="text-sm mb-1">Enter UserId</div> */}
               <input
-                value={userId}
-                onChange={(e) => setUserId(e.target.value)}
+                value={ipNumber}
+                onChange={(e) => setIpNumber(e.target.value)}
                 className="w-full border rounded px-3 py-2"
-                placeholder="Enter User ID"
+                placeholder="Enter IP Number"
                 required
               />
             </label>

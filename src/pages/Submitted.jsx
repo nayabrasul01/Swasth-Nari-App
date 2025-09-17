@@ -15,7 +15,7 @@ export default function Submitted() {
     if (Boolean(visitRequired)) {
       setDisplayText("Visit nearest Dispensary/Hospital.");
     }else{
-      setDisplayText("");
+      setDisplayText("Your health looks good. Wishing you good health!");
     }
   }, [visitRequired]);
 
