@@ -32,7 +32,7 @@ export default function MainLogin() {
             />
           </div> */}
            <div className="flex justify-center mb-4">
-            <h3 className="text-xl font-bold mb-4">
+            <h3 className="text-xl font-bold">
               Login Portal
             </h3>
            </div>
