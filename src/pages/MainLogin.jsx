@@ -23,14 +23,14 @@ export default function MainLogin() {
       <Header></Header>
       <div className="flex-grow flex items-center justify-center">
         <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow">
-          <div className="flex justify-center mb-4">
+          {/* <div className="flex justify-center mb-4">
             <img
               src={Nari_sakthi_logo}
               alt="Nari Sakthi Logo"
               style={{ height: '120px', objectFit: 'contain' }}
               title="Nari Sakthi Logo"
             />
-          </div>
+          </div> */}
            <div className="flex justify-center mb-4">
             <h3 className="text-xl font-bold mb-4">
               Login Portal

@@ -50,7 +50,7 @@ export default function Questionnaire({ onComplete }) {
 
       if(Object.keys(data).length == questions.length) {
         alert("You have already completed the assessement. Redirecting to submission page.");
-        nav("/submitted");
+        nav("/");
       }
     } catch (err) {
       console.error("Failed to fetch user responses:", err);

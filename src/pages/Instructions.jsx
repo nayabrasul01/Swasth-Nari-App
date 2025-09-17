@@ -253,54 +253,53 @@ export default function Instructions() {
               <h3 className="text-lg font-bold mb-4">Enter Health Information</h3>
 
               <div className="space-y-4">
-                <div>
-                  <label className="block mb-1 font-medium">Blood Pressure</label>
-                  <input
-                    type="text"
-                    value={bp}
-                    onChange={(e) => setBp(e.target.value)}
-                    placeholder="e.g., 120/80"
-                    className="w-full border rounded px-3 py-2"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 font-medium">Random Blood Sugar</label>
-                  <input
-                    type="number"
-                    value={sugar}
-                    onChange={(e) => setSugar(e.target.value)}
-                    placeholder="mg/dL"
-                    className="w-full border rounded px-3 py-2"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 font-medium">Haemoglobin</label>
-                  <input
-                    type="number"
-                    value={hb}
-                    onChange={(e) => setHb(e.target.value)}
-                    placeholder="g/dL"
-                    className="w-full border rounded px-3 py-2"
-                    required
-                  />
-                </div>
-              </div>
+                <form onSubmit={handleSubmitHealth} className="space-y-4">
+                    <label className="block mb-1 font-medium">Blood Pressure</label>
+                    <input
+                      type="text"
+                      value={bp}
+                      onChange={(e) => setBp(e.target.value)}
+                      placeholder="e.g., 120/80"
+                      className="w-full border rounded px-3 py-2"
+                      required
+                    />
+                  
+                    <label className="block mb-1 font-medium">Random Blood Sugar</label>
+                    <input
+                      type="number"
+                      value={sugar}
+                      onChange={(e) => setSugar(e.target.value)}
+                      placeholder="mg/dL"
+                      className="w-full border rounded px-3 py-2"
+                      required
+                    />
+                  
+                    <label className="block mb-1 font-medium">Haemoglobin</label>
+                    <input
+                      type="number"
+                      value={hb}
+                      onChange={(e) => setHb(e.target.value)}
+                      placeholder="g/dL"
+                      className="w-full border rounded px-3 py-2"
+                      required
+                    />
 
-              <div className="flex justify-end gap-4 mt-6">
-                <button
-                  className="px-2 py-2 bg-gray-300 rounded"
-                  onClick={() => setShowHealthModal(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="px-2 py-2 bg-blue-600 text-white rounded"
-                  onClick={handleSubmitHealth}
-                >
-                  Save & Continue
-                </button>
+                    <div className="flex justify-end gap-4 mt-6">
+                      <button
+                        className="px-2 py-2 bg-gray-300 rounded"
+                        onClick={() => setShowHealthModal(false)}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-2 py-2 bg-blue-600 text-white rounded"
+                        // onClick={handleSubmitHealth}
+                      >
+                        Save & Continue
+                      </button>
+                    </div>
+                  </form>
               </div>
             </div>
           </div>
