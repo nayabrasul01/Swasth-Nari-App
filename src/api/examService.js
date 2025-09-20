@@ -2,8 +2,8 @@ import axios from "axios";
 
 // const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:9091";
 
-// const API_BASE = "http://localhost:9090";
-const API_BASE = "";
+// const API_BASE = "http://localhost:9090/api";
+const API_BASE = "/api";
 
 // export async function startSession(userIdentifier, examId = "exam-uuid-001") {
 //   try {
@@ -67,6 +67,24 @@ export async function login (username, password) {
       "status": "failure",
     };
   }
+
+  // try {
+  //   const queryParams = new URLSearchParams({
+  //     username: username,
+  //     password: password,
+  //   }).toString();
+
+  //   const res = await fetch(`${API_BASE}/auth/login?${queryParams}`, {
+  //     method: 'GET',
+  //     headers: {
+  //     'Content-Type': 'application/json'
+  //     }
+  //   });
+  //   const data = await res.json();
+  //   return data;
+  // } catch (e) {
+  //   throw e;
+  // }
 };
 
 
@@ -107,6 +125,30 @@ export async function saveAnswer(questionnaireId, questionId, answer, userId) {
     throw e;
   }
 }
+
+export async function saveIpVitals(vitalsData) {
+  try {
+    const token = localStorage.getItem("jwt"); // If using JWT auth
+    const response = await fetch(`${API_BASE}/questionnaires/vitals`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` // remove if not using auth
+      },
+      body: JSON.stringify(vitalsData)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to save vitals: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error("Error saving vitals:", err);
+    throw err;
+  }
+}
+
 
 
 // export async function completeSession(sessionId, token, payload) {
@@ -164,6 +206,41 @@ export async function getUserResponses(id, uhid){
       }
     });
     const data = await res.json();
+    return data;
+  } catch (e) {
+    throw e;
+  }
+}
+
+export async function validateToken(){
+  try {
+    const token = localStorage.getItem("jwt");
+    const res = await fetch(`${API_BASE}/auth/validate`, {
+      method: 'GET',
+      headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+      }
+    });
+    const data = await res.json();
+    return data;
+  } catch (e) {
+    throw e;
+  }
+}
+
+export async function logout(){
+  try {
+    const token = localStorage.getItem("jwt");
+    const response = await fetch(`${API_BASE}/auth/logout`, {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+      }
+    });
+
+    const data = await response.text();
     return data;
   } catch (e) {
     throw e;

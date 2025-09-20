@@ -9,17 +9,19 @@ import { login } from "../api/examService";
 export default function MainLogin() {
   const [userId, setUserId] = useState("");
   const [pass, setPass] = useState("");
+  const [loading, setLoading] = useState(false);
   const nav = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+    setLoading(true);
     const response = await login(userId, pass);
     if(response.status === "failure") {
       alert("Invalid credentials. Please try again.");
+      setLoading(false);
       return;
     }
-    localStorage.setItem("jwt", response.token);
+    setItem("jwt", response.token);
 
     if (!userId || !pass) return;
     setItem("doc_userId", userId);
@@ -31,6 +33,12 @@ export default function MainLogin() {
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Header></Header>
       <div className="flex-grow flex items-center justify-center">
+        {loading ? (
+          <div className="flex flex-col items-center justify-center w-full h-full">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid mb-4"></div>
+            {/* <span className="text-lg font-semibold">Submitting...</span> */}
+          </div>
+        ) : (
         <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow">
           {/* <div className="flex justify-center mb-4">
             <img
@@ -73,6 +81,7 @@ export default function MainLogin() {
             </button>
           </form>
         </div>
+        )}
       </div>
       <Footer></Footer>
     </div>

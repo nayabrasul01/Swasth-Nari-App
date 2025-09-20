@@ -18,6 +18,7 @@ export default function Questionnaire({ onComplete }) {
   const [userResponses, setUserResponses] = useState([]);
   const [timeLeft, setTimeLeft] = useState(20);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // ✅ define fetchQuestions BEFORE useEffect
   const fetchQuestions = async () => {
@@ -50,7 +51,11 @@ export default function Questionnaire({ onComplete }) {
 
       if(Object.keys(data).length == questions.length) {
         alert("You have already completed the assessement. Redirecting to submission page.");
-        nav("/");
+        removeItem("exam_userId");
+        removeItem("selected_language");
+        removeItem("selected_UHID");
+        removeItem("vitals");
+        nav("/login");
       }
     } catch (err) {
       console.error("Failed to fetch user responses:", err);
@@ -60,10 +65,10 @@ export default function Questionnaire({ onComplete }) {
   };
 
   useEffect(() => {
-    if (questions.length > 0) {
+    if (questions.length > 0 && !isSubmitting) {
       fetchUserResponses();
     }
-  }, [questions]);
+  }, [questions, isSubmitting]);
 
   useEffect(() => {
     if (!userId || !docId || !uhid) nav("/"); // redirect if no userId or docId
@@ -110,6 +115,7 @@ export default function Questionnaire({ onComplete }) {
     if (currentIndex + 1 < questions.length) {
       setCurrentIndex((idx) => idx + 1);
     } else {
+      setIsSubmitting(true);
       setShowSubmitModal(true);
     }
   };
@@ -131,7 +137,7 @@ export default function Questionnaire({ onComplete }) {
     }
     
     setItem("visit_required", flag);
-    removeItem("doc_userId");
+    // removeItem("doc_userId");
     removeItem("exam_userId");
     removeItem("selected_language");
     removeItem("selected_UHID");

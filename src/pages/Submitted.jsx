@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getItem } from "../utils/localStorage.js";
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
+import { removeItem } from "../utils/localStorage";
 
 export default function Submitted() {
   const nav = useNavigate();
@@ -17,6 +18,8 @@ export default function Submitted() {
     }else{
       setDisplayText("Your health looks good. Wishing you good health!");
     }
+
+    removeItem("visit_required");
   }, [visitRequired]);
 
   return (
@@ -52,7 +55,7 @@ export default function Submitted() {
             <li>If you need to access the portal again, please contact the administrator.</li>
           </ul>
           <button
-            onClick={() => nav("/")}
+            onClick={() => nav("/login")}
             className="mt-2 px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-600 transition"
           >
             Go to Home
