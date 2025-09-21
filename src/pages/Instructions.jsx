@@ -32,10 +32,12 @@ export default function Instructions() {
 
           if(response.status == "failure"){
             alert("Error loading IP details. Please try again.");
+            removeItem("exam_userId");
             nav("/login");
           }else if (response.employeeIPNo == null) {
             alert("No IP found with the given IP Number. Please enter valid IP Number.");
             nav("/login");
+            removeItem("exam_userId")
           }
           setIpDetails(response);
           setFamilyDetails(response.InsuredPersonFamilyDetails);
@@ -86,7 +88,7 @@ export default function Instructions() {
         hemoglobin: hb,
       };
       // store in localStorage
-      localStorage.setItem("vitals", JSON.stringify(vitals));
+      setItem("vitals", JSON.stringify(vitals));
 
       try {
       const savedData = await saveIpVitals(vitals);

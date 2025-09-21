@@ -43,6 +43,10 @@ export default function Login() {
       const response = await logout();
       removeItem("jwt");
       removeItem("doc_userId");
+      removeItem("exam_userId");
+      removeItem("selected_language");
+      removeItem("selected_UHID");
+      removeItem("vitals");
       nav("/")
     }
     setLoading(false);

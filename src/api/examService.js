@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getItem, removeItem, setItem } from "../utils/localStorage";
 
 // const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:9091";
 
@@ -105,7 +106,7 @@ export async function login (username, password) {
 
 export async function saveAnswer(questionnaireId, questionId, answer, userId) {
   try {
-    const token = localStorage.getItem("jwt");
+    const token = getItem("jwt");
     const response = await fetch(`${API_BASE}/responses`, {
       method: 'POST',
       headers: {
@@ -128,7 +129,7 @@ export async function saveAnswer(questionnaireId, questionId, answer, userId) {
 
 export async function saveIpVitals(vitalsData) {
   try {
-    const token = localStorage.getItem("jwt"); // If using JWT auth
+    const token = getItem("jwt"); // If using JWT auth
     const response = await fetch(`${API_BASE}/questionnaires/vitals`, {
       method: "POST",
       headers: {
@@ -170,7 +171,7 @@ export async function saveIpVitals(vitalsData) {
 
 export async function getQuestions(id, selectedLanguage) {
   try {
-    const token = localStorage.getItem("jwt");
+    const token = getItem("jwt");
     const res = await fetch(`${API_BASE}/questionnaires/${id}/questions/${selectedLanguage}`, {
       method: 'GET',
       headers: {
@@ -197,7 +198,7 @@ export async function getQuestions(id, selectedLanguage) {
 
 export async function getUserResponses(id, uhid){
   try {
-    const token = localStorage.getItem("jwt");
+    const token = getItem("jwt");
     const res = await fetch(`${API_BASE}/responses/user/${uhid}/questionnaire/${id}`, {
       method: 'GET',
       headers: {
@@ -214,7 +215,7 @@ export async function getUserResponses(id, uhid){
 
 export async function validateToken(){
   try {
-    const token = localStorage.getItem("jwt");
+    const token = getItem("jwt");
     const res = await fetch(`${API_BASE}/auth/validate`, {
       method: 'GET',
       headers: {
@@ -231,7 +232,7 @@ export async function validateToken(){
 
 export async function logout(){
   try {
-    const token = localStorage.getItem("jwt");
+    const token = getItem("jwt");
     const response = await fetch(`${API_BASE}/auth/logout`, {
       method: 'POST',
       headers: {
@@ -250,7 +251,7 @@ export async function logout(){
 export async function getIpDetails(id){
   try {
     // const res = await axios.get(`${API_BASE}/auth/ip-details/${id}`);
-    const token = localStorage.getItem("jwt");
+    const token = getItem("jwt");
     const response = await fetch(`${API_BASE}/questionnaires/getIpDetails`, {
       method: 'POST',
       headers: {
