@@ -24,12 +24,12 @@ export default function Instructions() {
   React.useEffect(() => {
     async function fetchDetails() {
       const isValid = await validateCurrentSession();
-      if (userId || isValid) {
+      if (userId && isValid) {
         try {
           setLoading(true);
           const response = await getIpDetails(userId);
           // const response = ipDetailsMockData;
-
+        
           if(response.status == "failure"){
             alert("Error loading IP details. Please try again.");
             removeItem("exam_userId");
@@ -60,7 +60,7 @@ export default function Instructions() {
 
    async function validateCurrentSession() {
       const response = await validateToken();
-      response?.status === "success";
+      return response?.status === "success";
     }
 
   function takeVitalSigns() {
@@ -98,74 +98,6 @@ export default function Instructions() {
     }
   }
 
-    // const handleSubmitHealth = async () => {
-    //   const vitals = {
-    //     ipNumber: selectedUHID,
-    //     bloodPressure: "120/80",
-    //     rbs: sugar,
-    //     hemoglobin: hb,
-    //     pulse: null,
-    //     temperature: null,
-    //   };
-
-    //   // store in localStorage
-    //   localStorage.setItem("vitals", JSON.stringify(vitals));
-
-    //   try {
-    //     const savedData = await saveIpVitals(vitals); // await here
-    //     if (savedData && savedData.status) {
-    //       alert("Vitals saved successfully!");
-    //     } else {
-    //       alert("Failed to save vitals!");
-    //     }
-    //     // close modal and redirect to exam
-    //     setShowHealthModal(false);
-    //     nav("/exam");
-    //   } catch (err) {
-    //     console.error("Error saving vitals:", err);
-    //     alert("Failed to save vitals!");
-    //   }
-    // };
-
-
-  // Simulating API fetch (replace with actual API call)
-  // React.useEffect(() => {
-  //   const response = {
-  //     appointmentDate: "13-12-2021 00:00:00",
-  //     dateOfregistration: "27-03-2010 00:00:00",
-  //     employeeIPNo: "1111111111,8790169068",
-  //     InsuredPersonFamilyDetails: [
-  //       {
-  //         slNo: 0,
-  //         relationship: "Dependant father",
-  //         name: "test",
-  //         uHID: "DUMM.0000011005",
-  //         residingState: "Delhi",
-  //         sex: "F",
-  //       },
-  //       {
-  //         slNo: 1,
-  //         relationship: "Dependant father",
-  //         name: "test",
-  //         uHID: "DUMM.0000011006",
-  //         residingState: "Delhi",
-  //         sex: "F",
-  //       },
-  //       {
-  //         slNo: 2,
-  //         relationship: "Minor dependant son",
-  //         name: "Test2",
-  //         uHID: "DUMM.0000000735",
-  //         residingState: "Uttar Pradesh",
-  //         sex: "M",
-  //       },
-  //     ],
-  //   };
-
-  //   // setFamilyDetails(response.InsuredPersonFamilyDetails);
-  //   // setIpDetails(response);
-  // }, []);
-
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Header></Header>
@@ -173,166 +105,221 @@ export default function Instructions() {
         {loading ? (
           <div className="flex flex-col items-center justify-center w-full h-full">
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid mb-4"></div>
-            {/* <span className="text-lg font-semibold">Submitting...</span> */}
-          </div>
-        ) : (
-          <div className="w-full max-w-3xl bg-white p-6 rounded-2xl shadow">
-            <div className="flex justify-between items-center mb-4">
-              <div></div>
-              <select
-                className="border rounded px-3 py-1 text-gray-700"
-                value={selectedLanguage}
-                onChange={(e) => setSelectedLanguage(e.target.value)}
-                aria-label="Select language"
-              >
-                <option value="hi">Hindi</option>
-                <option value="te">Telugu</option>
-                <option value="ta">Tamil</option>
-                <option value="mr">Marathi</option>
-                <option value="bn">Bengali</option>
-                <option value="gu">Gujarati</option>
-                <option value="ur">Urdu</option>
-                <option value="ml">Malayalam</option>
-                <option value="kn">Kannada</option>
-                <option value="or">Odia</option>
-                <option value="doi">Dogri</option>
-                <option value="mai">Maithili</option>
-                <option value="sa">Sanskrit</option>
-                <option value="pa">Punjabi</option>
-                <option value="sd">Sindhi</option>
-              </select>
-            </div>
-            <h2 className="text-2xl font-bold mb-2">IP Details</h2>
-            {ipDetails && (
-              <div className="mb-6 p-4 bg-gray-100 rounded">
-                {/* <h3 className="font-semibold mb-2">IP Details</h3> */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-gray-800">
-                  <div>
-                    <span className="font-medium">IP Name:</span>{" "}
-                    {ipDetails.personalDetails?.[0]?.name || "-"}
-                  </div>
-                  <div>
-                    <span className="font-medium">IP Number:</span>{" "}
-                    {ipDetails.employeeIPNo || "-"}
-                  </div>
-                  <div>
-                    <span className="font-medium">UHID:</span>{" "}
-                    {ipDetails.uHID || "-"}
-                  </div>
-                  <div>
-                    <span className="font-medium">Sex:</span>{" "}
-                    {ipDetails.personalDetails?.[0]?.sex || "-"}
-                  </div>
-                  {/* <div>
-                  <span className="font-medium">Date of Birth: </span>
-                  {ipDetails.personalDetails?.[0]?.dateOfBirth
-                  ? ipDetails.personalDetails[0].dateOfBirth.split(" ")[0]
-                  : "-"}
-                </div> */}
-                  {/* <div className="sm:col-span-2">
-                  <span className="font-medium">Residential Address:</span> {userDetails.residentialAddress || "-"}
+          </div> ) : (ipDetails && familyDetails ? (
+              <div className="max-auto max-w-5xl bg-white p-6 rounded-2xl shadow">
+                <div className="flex justify-between items-center mb-2">
+                  <div></div>
+                  <select
+                    className="border rounded px-3 py-1 text-gray-700"
+                    value={selectedLanguage}
+                    onChange={(e) => setSelectedLanguage(e.target.value)}
+                    aria-label="Select language"
+                  >
+                    <option value="hi">Hindi</option>
+                    <option value="te">Telugu</option>
+                    <option value="ta">Tamil</option>
+                    <option value="mr">Marathi</option>
+                    <option value="bn">Bengali</option>
+                    <option value="gu">Gujarati</option>
+                    <option value="ur">Urdu</option>
+                    <option value="ml">Malayalam</option>
+                    <option value="kn">Kannada</option>
+                    <option value="or">Odia</option>
+                    <option value="doi">Dogri</option>
+                    <option value="mai">Maithili</option>
+                    <option value="sa">Sanskrit</option>
+                    <option value="pa">Punjabi</option>
+                    <option value="sd">Sindhi</option>
+                  </select>
                 </div>
-                <div className="sm:col-span-2">
-                  <span className="font-medium">Mobile number:</span> {userDetails.mobileNumber || "-"}
-                </div> */}
+                <div className="flex justify-between items-center mb-4">
+                  <div></div>
+                  <span className="text-sm text-gray-600">
+                    <span className="text-red-500">*</span> Select assessment language
+                  </span>
                 </div>
-                <br />
-                <table className="w-full border-collapse border border-gray-400 text-gray-700">
-                  <thead>
-                    <tr className="bg-gray-200">
-                      <th className="border border-gray-400 px-4 py-2">
-                        Select
-                      </th>
-                      <th className="border border-gray-400 px-4 py-2">Name</th>
-                      <th className="border border-gray-400 px-4 py-2">
-                        Relationship
-                      </th>
-                      <th className="border border-gray-400 px-4 py-2">Sex</th>
-                      <th className="border border-gray-400 px-4 py-2">UHID</th>
-                      <th className="border border-gray-400 px-4 py-2">
-                        State
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {familyDetails.map((member, index) => (
-                      <tr key={index} className="text-center">
-                        <td className="border border-gray-400 px-4 py-2">
-                          <input
-                            type="radio"
-                            name={`selectedMember_${index}`}
-                            value={member.uHID}
-                            checked={
-                              member.sex === "F" && selectedUHID === member.uHID
-                            }
-                            // disabled={member.sex !== "F"}
-                            onChange={(e) => {
-                              if (member.sex === "F") {
-                                setSelectedUHID(e.target.value);
-                              } else {
-                                alert("Only Female can give the assessment");
-                              }
-                            }}
-                          />
-                        </td>
-                        <td className="border border-gray-400 px-4 py-2">
-                          {member.name}
-                        </td>
-                        <td className="border border-gray-400 px-4 py-2">
-                          {member.relationship}
-                        </td>
-                        <td className="border border-gray-400 px-4 py-2">
-                          {member.sex}
-                        </td>
-                        <td className="border border-gray-400 px-4 py-2">
-                          {member.uHID}
-                        </td>
-                        <td className="border border-gray-400 px-4 py-2">
-                          {member.residingState}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-            {/* <ol className="list-decimal pl-6 space-y-2 text-gray-700">
-            <li>
-              Login with your UserID: <strong>{userId}</strong>
-            </li>
-            <li>
-              Each question has a 20 second timer. Provide voice answer: "YES" or
-              "NO".
-            </li>
-            <li>
-              If no answer within 20s, the default answer <strong>NO</strong> will
-              be recorded.
-            </li>
-            <li>
-              After speaking, click <strong>Save & Next</strong> to persist your
-              answer.
-            </li>
-            <li>On the last question you will be asked to confirm submission.</li>
-          </ol> */}
-            <div className="mt-6 flex gap-3">
-              <button
-                onClick={() =>{
-                  removeItem("exam_userId");
-                  nav("/login")
-                }}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-              >
-                Back
-              </button>
-              <button
-                onClick={takeVitalSigns}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        )}
+                <div className="flex justify-center">
+                  <h1 className="text-2xl mb-2">Insured Person Details</h1>
+                </div>
+
+                {ipDetails && (
+                  <div className="mb-6 p-4 bg-gray-100 rounded">
+                    {/* <h3 className="font-semibold mb-2">IP Details</h3> */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-gray-800">
+                      <div>
+                        <span className="font-medium">IP Name:</span>{" "}
+                        {ipDetails.personalDetails?.[0]?.name || "-"}
+                      </div>
+                      <div>
+                        <span className="font-medium">IP Number:</span>{" "}
+                        {ipDetails.employeeIPNo || "-"}
+                      </div>
+                      <div>
+                        <span className="font-medium">UHID:</span>{" "}
+                        {ipDetails.uHID || "-"}
+                      </div>
+                      <div>
+                        <span className="font-medium">Sex:</span>{" "}
+                        {ipDetails.personalDetails?.[0]?.sex || "-"}
+                      </div>
+                      <div>
+                        <span className="font-medium">Address:</span>{" "}
+                        {(ipDetails.AddressDetails?.length > 0
+                          ? [ipDetails.AddressDetails[0]?.address1, ipDetails.AddressDetails[0]?.address2, ipDetails.AddressDetails[0]?.address3]
+                              .filter(Boolean) // removes null, undefined, and empty strings
+                              .join(", ")
+                          : "-")}
+                      </div>
+                      {/* <div>
+                      <span className="font-medium">Date of Birth: </span>
+                      {ipDetails.personalDetails?.[0]?.dateOfBirth
+                      ? ipDetails.personalDetails[0].dateOfBirth.split(" ")[0]
+                      : "-"}
+                    </div> */}
+                      {/* <div className="sm:col-span-2">
+                      <span className="font-medium">Residential Address:</span> {userDetails.residentialAddress || "-"}
+                    </div>
+                    <div className="sm:col-span-2">
+                      <span className="font-medium">Mobile number:</span> {userDetails.mobileNumber || "-"}
+                    </div> */}
+                    </div>
+                    <br />
+                    <table className="w-full border-collapse border border-gray-400 text-gray-700">
+                      <thead>
+                        <tr className="bg-gray-200">
+                          <th className="border border-gray-400 px-4 py-2">
+                            Select
+                          </th>
+                          <th className="border border-gray-400 px-4 py-2">Name</th>
+                          <th className="border border-gray-400 px-4 py-2">
+                            Relationship
+                          </th>
+                          <th className="border border-gray-400 px-4 py-2">Sex</th>
+                          <th className="border border-gray-400 px-4 py-2">UHID</th>
+                          <th className="border border-gray-400 px-4 py-2">
+                            State
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* added row for self IP details */}
+                        <tr className="text-center">
+                          <td className="border border-gray-400 px-4 py-2">
+                            <input
+                                type="radio"
+                                // name={`selectedMember_${index}`}
+                                value={ipDetails.uHID}
+                                checked={
+                                  selectedUHID === ipDetails.uHID
+                                }
+                                // disabled={member.sex !== "F"}
+                                onChange={(e) => {
+                                  const sex = ipDetails.personalDetails?.[0]?.sex?.trim().toLowerCase(); // normalize case safely
+                                  if (sex === "f" || sex === "female") {
+                                    setSelectedUHID(e.target.value);
+                                  } else {
+                                    alert("Only Female can give the assessment");
+                                  }
+                                }}
+                              />
+                          </td>
+                          <td className="border border-gray-400 px-4 py-2">
+                            {ipDetails.personalDetails?.[0].name}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-2">
+                            {/* {ipDetails.personalDetails?.relationship} */}
+                            Self
+                          </td>
+                          <td className="border border-gray-400 px-4 py-2">
+                            {ipDetails.personalDetails?.[0].sex}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-2">
+                            {ipDetails.uHID}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-2">
+                            {/* {ipDetails.AddressDetails?.[0].address1} */}
+                            -
+                          </td>
+                        </tr>
+                        {familyDetails.map((member, index) => (
+                          <tr key={index} className="text-center">
+                            <td className="border border-gray-400 px-4 py-2">
+                              <input
+                                type="radio"
+                                name={`selectedMember_${index}`}
+                                value={member.uHID}
+                                checked={
+                                  selectedUHID === member.uHID
+                                }
+                                // disabled={member.sex !== "F"}
+                                onChange={(e) => {
+                                  const sex = member.sex?.trim().toLowerCase(); // normalize case safely
+                                  if (sex === "f" || sex === "female") {
+                                    setSelectedUHID(e.target.value);
+                                  } else {
+                                    alert("Only Female can give the assessment");
+                                  }
+                                }}
+                              />
+                            </td>
+                            <td className="border border-gray-400 px-4 py-2">
+                              {member.name}
+                            </td>
+                            <td className="border border-gray-400 px-4 py-2">
+                              {member.relationship}
+                            </td>
+                            <td className="border border-gray-400 px-4 py-2">
+                              {member.sex}
+                            </td>
+                            <td className="border border-gray-400 px-4 py-2">
+                              {member.uHID}
+                            </td>
+                            <td className="border border-gray-400 px-4 py-2">
+                              {member.residingState}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+                {/* <ol className="list-decimal pl-6 space-y-2 text-gray-700">
+                <li>
+                  Login with your UserID: <strong>{userId}</strong>
+                </li>
+                <li>
+                  Each question has a 20 second timer. Provide voice answer: "YES" or
+                  "NO".
+                </li>
+                <li>
+                  If no answer within 20s, the default answer <strong>NO</strong> will
+                  be recorded.
+                </li>
+                <li>
+                  After speaking, click <strong>Save & Next</strong> to persist your
+                  answer.
+                </li>
+                <li>On the last question you will be asked to confirm submission.</li>
+              </ol> */}
+                <div className="mt-6 flex gap-3">
+                  <button
+                    onClick={() =>{
+                      removeItem("exam_userId");
+                      nav("/login")
+                    }}
+                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                  >
+                    Back
+                  </button>
+                  <button
+                    onClick={takeVitalSigns}
+                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div> ) : <div className="text-center py-4">No data available</div>)
+        }
 
         {showHealthModal && (
           <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">

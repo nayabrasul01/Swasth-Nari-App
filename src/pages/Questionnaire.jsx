@@ -36,6 +36,10 @@ export default function Questionnaire({ onComplete }) {
     } catch (err) {
       console.error("Failed to fetch questions:", err);
       alert("Failed to load questions. Please try again later.");
+      if(err.error === "Unauthorized"){
+        console.log(err);
+        nav("/");
+      }
       nav("/instructions");
       setQuestions([]);
     }finally {
@@ -192,7 +196,7 @@ export default function Questionnaire({ onComplete }) {
           </div>
         ) : (
           <>
-            <main className="flex-1 mx-4 p-6 bg-white rounded shadow-md max-w-3xl flex flex-col">
+            <main className="flex-1 mx-4 p-6 bg-white rounded shadow-md max-w-4xl flex flex-col">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold">
                   Question {currentIndex + 1}/{questions.length}

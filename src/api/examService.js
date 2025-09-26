@@ -182,8 +182,10 @@ export async function getQuestions(id, selectedLanguage) {
 
     if (!res.ok) {
       // helpful error logging
-      const errorText = await res.text();
-      throw new Error(`HTTP ${res.status}: ${errorText}`);
+      // const errorText = await res.text();
+      // throw new Error(`HTTP ${res.status}: ${errorText}`);
+      const errorText = await res.json();
+      throw errorText
     }
 
     // parse JSON correctly

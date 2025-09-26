@@ -75,7 +75,7 @@ export default function Login() {
         ) : (
           <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow">
           <div className="flex justify-center mb-4">
-            <h2 className="text-xl font-bold">
+            <h2 className="text-xl">
               IP Checklist
             </h2>
           </div>
